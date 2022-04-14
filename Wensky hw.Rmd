@@ -1,0 +1,101 @@
+---
+title: "Informatique pour Science Sociale"
+date: "13 Avril 2022"
+output:
+  pdf_document: default
+  html_notebook: default
+  html_document:
+    df_print: paged
+---
+
+# Wensky LOUIS-JEAN
+# Hadley Kervens RENE
+# Alixandra Lorshely COLAS
+# Gardy Stanley JEAN BAPTISTE
+
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+
+library(tidyverse)
+
+df <- read.csv("C:\\Users\\ljjma\\Downloads\\WB_HT_DATA.csv", skip = 3) # upload fichier excel
+
+# transformation de la base de donnees
+
+df <- df %>% pivot_longer(7:67, names_to = "year", values_to = "n") 
+# creation de 2 nouvelles variables
+# 1. "year" pour sauvegarder les annees (1960-2020)
+# 2. "n" la mesure de chaque indicateur pour chaque annee respective
+
+head(df) # lecture 6 premieres lignes du fichier
+
+
+# Figure 2.4
+
+
+
+reserve.ratio <- df %>% 
+  filter(Indicator.Name == "Bank liquid reserves to bank assets ratio (%)") %>%
+  rename(ratio = n) %>%
+  select(year, ratio)
+
+head(reserve.ratio)
+
+reserve.ratio %>% 
+  filter(year >= "X2000")  %>% 
+  mutate(annee = 2000:2020) %>% 
+  ggplot(aes(annee, ratio))+
+  geom_line(color = "dark green")+
+  labs(x = "Années",
+       y = "% du PIB",
+       title = "Figure 2.4: Ratio des réserves liquides des banques sur leurs actifs (%)")+
+  geom_smooth(col = "red", se = F, size = 0.01)+
+  geom_vline(xintercept = 2008, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2010, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2015, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2020, linetype = "dotted", color = "red")
+
+
+
+
+```
+
+
+
+
+
+
+```{r}
+# Figure 3.1
+
+pib.data <- df %>%  
+  filter(Indicator.Name == "GDP (current US$)") %>%
+  rename(PIB = n) %>%
+  select(year, PIB)
+
+transferts <- df %>% 
+  filter(Indicator.Name == "Personal transfers, receipts (BoP, current US$)") %>% 
+  rename(montant.transfert = n) %>% 
+  select(montant.transfert)
+
+donnees <- data.frame(c(pib.data, transferts))
+head(donnees)
+
+donnees %>% 
+  mutate(evolution = montant.transfert / PIB * 100) %>% 
+  filter(year >= "X2000")  %>% 
+  mutate(annee = 2000:2020) %>% 
+  ggplot(aes(annee, evolution))+
+  geom_line(color = "dark green")+
+  labs(x = "Années",
+       y = "% du PIB",
+       title = "Figure 3.1: Evolution des transferts annuelles (% du PIB)")+
+   geom_vline(xintercept = 2008, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2010, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2016, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2019, linetype = "dotted", color = "red")+
+  geom_vline(xintercept = 2020, linetype = "dotted", color = "red")
+
+
+
+```
+   
