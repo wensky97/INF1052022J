@@ -15,8 +15,8 @@ output: html_document
 library(tidyverse)
 library(openxlsx)
 
-df <- read.xlsx("donnee.xlsx") # upload fichier excel
-
+df <- read.xlsx("donnee.xlsx",startRow = 4)# upload fichier excel
+head(df)
 
 
 ```
