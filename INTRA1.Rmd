@@ -15,8 +15,43 @@ output: html_document
 library(tidyverse)
 library(openxlsx)
 
-df <- read.xlsx("donnee.xlsx",startRow = 4)# upload fichier excel
+df <- read.xlsx("WB_HT_DATA.xlsx",startRow = 4)# upload fichier excel
 head(df)
+
+# transformation de la base de donnees
+
+df <- df %>% pivot_longer(7:67, names_to = "year", values_to = "n") 
+# creation de 2 nouvelles variables
+# 1. "year" pour sauvegarder les annees (1960-2020)
+# 2. "n" la mesure de chaque indicateur pour chaque annee respective
+
+
+# Figure 2.4
+
+
+
+reserve.ratio <- df %>% 
+  filter(Indicator.Name == "Bank liquid reserves to bank assets ratio (%)") %>%
+  rename(ratio = n) %>%
+  select(year, ratio)
+
+head(reserve.ratio)
+
+reserve.ratio %>% 
+  filter(year >= "2000")  %>% 
+  mutate(annee = 2000:2020) %>% 
+  ggplot(aes(annee, ratio))+
+  geom_line(color = "dark green")+
+  labs(x = "Années",
+       y = "% du PIB",
+       title = "Figure 2.4: Ratio des réserves liquides des banques sur leurs actifs (%)")+
+  geom_smooth(col = "red", se = F, size = 0.01)+
+  geom_vline(xintercept = 2008, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2010, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2015, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2020, linetype = "dotted", color = "red")
+
+
 
 
 ```
