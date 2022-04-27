@@ -88,3 +88,82 @@ donnees %>%
 
 ```
 
+
+
+# 2e methode
+
+```{r}
+df <- read.xlsx("WB_HT_DATA.xlsx",startRow = 4)# upload fichier excel
+
+reserve.ratio <- df %>% 
+  filter(Indicator.Name == "Bank liquid reserves to bank assets ratio (%)") %>% 
+  select(7:67) %>% 
+  as.numeric()
+
+annee <- 1960:2020
+annee
+
+data <- data.frame(cbind(annee, reserve.ratio))
+data
+
+data %>% 
+  filter(annee >= 2000) %>% 
+  ggplot(aes(annee, reserve.ratio))+
+  geom_line(color = "dark green")+
+  labs(x = "Années",
+       y = "% du PIB",
+       title = "Figure 2.4: Ratio des réserves liquides des banques sur leurs actifs (%)")+
+  geom_smooth(col = "red", se = F, size = 0.01)+
+  geom_vline(xintercept = 2008, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2010, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2015, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2020, linetype = "dotted", color = "red")
+
+
+# figure 3.1
+
+pib <- df %>%  
+  filter(Indicator.Name == "GDP (current US$)") %>% 
+  select(7:67) %>% 
+  as.numeric()
+
+pib
+
+transferts <- df %>% 
+  filter(Indicator.Name == "Personal transfers, receipts (BoP, current US$)") %>%
+  select(7:67) %>% 
+  as.numeric
+
+donnees <- data.frame(cbind(annee, pib, transferts))
+
+donnees %>% 
+  mutate(evolution = transferts / pib * 100) %>% 
+  filter(annee >= 2000)  %>% 
+  ggplot(aes(annee, evolution))+
+  geom_line(color = "dark green")+
+  labs(x = "Années",
+       y = "% du PIB",
+       title = "Figure 3.1: Evolution des transferts annuelles (% du PIB)")+
+   geom_vline(xintercept = 2008, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2010, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2016, linetype = "dotted", color = "red")+
+   geom_vline(xintercept = 2019, linetype = "dotted", color = "red")+
+  geom_vline(xintercept = 2020, linetype = "dotted", color = "red")
+
+
+
+  
+
+
+
+
+
+
+```
+
+
+
+
+
+
+
