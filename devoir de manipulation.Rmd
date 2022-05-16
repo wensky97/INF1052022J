@@ -72,6 +72,14 @@ agregatsmon.data$Date[362] <- "2008-12-01"
 agregatsmon.data$Date[363] <- "2009-01-01"
 agregatsmon.data$Date[364] <- "2009-02-01"
 
+###############
+# 2. Filtrer a partir d'Octobre 1990
+#################
+
+agregatsmon.data2 <- agregatsmon.data %>% 
+  filter(Date >= "1990-10-01")
+
+head(agregatsmon.data2)
 
 
 
