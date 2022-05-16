@@ -81,6 +81,31 @@ agregatsmon.data2 <- agregatsmon.data %>%
 
 head(agregatsmon.data2)
 
+###############
+# 3. Retirer tous les colonnes inutiles
+###########
+
+agregatsmon.data2 <- agregatsmon.data2[,-c(5,9,11,15,20,23,25,30,35,40,42,47,56,79,84)]
+
+head(agregatsmon.data2)
+
+agregatsmon.data3 <- agregatsmon.data2[, c(7,8,36,37)]
+
+
+agregatsmon.data3 <- agregatsmon.data3 %>% 
+  rename(M3 = 'M3...8',
+         taux_change = `TAUX DE CHANGE BRH`,
+         reserves_depot = "Réserves nettes de changes BRH avec dépôts des BCMs (millions de  $)",
+         reserves_systeme = "Réserves nettes de change du système banc.(millions de $)")
+
+agregatsmon.data3 <- agregatsmon.data3 %>% 
+  mutate(M3 = as.numeric(M3),
+         taux_change = as.numeric(taux_change),
+         reserves_depot = as.numeric(reserves_depot),
+         reserves_systeme = as.numeric(reserves_systeme))
+
+head(agregatsmon.data3)
+
 
 
 ```
