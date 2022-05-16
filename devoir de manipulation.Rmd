@@ -29,6 +29,51 @@ agregatsmon.data <-read_excel(path = p1f, skip = 2)
 head(agregatsmon.data) # vizyalize 6 premye liy yo
 tail(agregatsmon.data, n = 10) # # vizyalize 10 premye liy yo
 
+# data cleaning
+agregatsmon.data <- agregatsmon.data[1:517,] # retire 10 denye liy 
+
+agregatsmon.data <- rename(agregatsmon.data, Date = ...1) 
+
+agregatsmon.data <- agregatsmon.data[-1,] # retire premye liy done a (sak gen deskripsyon yo)
+
+
+agregatsmon.data$Date <- as.numeric(agregatsmon.data$Date)
+# conversion date format charactere -> numerique
+
+sum(is.na(agregatsmon.data$Date)) 
+# 17 dates non formatees: 309-320, 360-364
+
+agregatsmon.data$Date <- as.Date(agregatsmon.data$Date, 
+                                 origin = "1899-12-30")
+# conversion dates format nombre en correct format 
+# en prenant 30 Decembre 1899 comme point de depart 
+
+agregatsmon.data$Date # verification pour exact match avec fichier Excel
+
+# Formattage des 17 dates manquantes
+# Hint: taper les valeurs en observant le fichier excel 
+
+agregatsmon.data$Date[309] <- "2004-07-01"
+agregatsmon.data$Date[310] <- "2004-08-01"
+agregatsmon.data$Date[311] <- "2004-09-01"
+agregatsmon.data$Date[312] <- "2004-10-01"
+agregatsmon.data$Date[313] <- "2004-11-01"
+agregatsmon.data$Date[314] <- "2004-12-01"
+agregatsmon.data$Date[315] <- "2005-01-01"
+agregatsmon.data$Date[316] <- "2005-02-01"
+agregatsmon.data$Date[317] <- "2005-03-01"
+agregatsmon.data$Date[318] <- "2005-04-01"
+agregatsmon.data$Date[319] <- "2005-05-01"
+agregatsmon.data$Date[320] <- "2005-06-01"
+
+agregatsmon.data$Date[360] <- "2008-10-01"
+agregatsmon.data$Date[361] <- "2008-11-01"
+agregatsmon.data$Date[362] <- "2008-12-01"
+agregatsmon.data$Date[363] <- "2009-01-01"
+agregatsmon.data$Date[364] <- "2009-02-01"
+
+
+
 
 ```
 
