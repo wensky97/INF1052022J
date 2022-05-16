@@ -1,0 +1,34 @@
+---
+title: "Manipulation"
+author: "Wensky LOUIS-JEAN"
+date: '2022-05-16'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+
+```{r}
+
+library(dplyr)
+library(readxl)
+
+
+#################
+# 1. Importation des donnees 
+#################
+
+url1<-'https://www.brh.ht/wp-content/uploads/agregatsmon.xls'
+p1f <- tempfile()
+download.file(url1, p1f, mode="wb")
+agregatsmon.data <-read_excel(path = p1f, skip = 2)
+head(agregatsmon.data) # vizyalize 6 premye liy yo
+tail(agregatsmon.data, n = 10) # # vizyalize 10 premye liy yo
+
+
+```
+
