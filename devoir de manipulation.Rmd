@@ -106,6 +106,26 @@ agregatsmon.data3 <- agregatsmon.data3 %>%
 
 head(agregatsmon.data3)
 
+################
+# 4. Estimer le taux de change a partir de M3 et reserves de change
+###############
+
+## 4.1 estimation avec reserves nettes de changes BRH avec depots des BCMs
+taux_change_est <- lm(taux_change ~ M3 + reserves_depot, 
+                      data = agregatsmon.data3)
+summary(taux_change_est)$coef
+
+# taux_change_est = 0.29 + 0.02*M3 - 0.02*reserves_depot
+
+
+## 4.2 estimation avec reserves nettes de changes du systeme bancaire
+taux_change_est2 <- lm(taux_change ~ M3 + reserves_systeme, 
+                       data = agregatsmon.data3)
+summary(taux_change_est2)$coef
+
+# taux_change_est2 = 1.59 + 0.02*M3 - 0.01*reserves_depot
+
+
 
 
 ```
