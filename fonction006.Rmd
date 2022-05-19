@@ -1,0 +1,35 @@
+---
+title: "fonction-006"
+author: "Wensky LOUIS-JEAN"
+date: '2022-05-19'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+```{r}
+
+##### Creation d'une fonction pour indiquer a la fois un multiple de 3 et de 5
+fonc<-function(x){
+  if(x%%5==0){
+    print("multiple de 5")
+  }
+  if(x%%3==0){
+    print("multiple de 3")
+  }
+}
+
+fonc(105)
+fonc(35)
+
+
+
+
+
+```
+
