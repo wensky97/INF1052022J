@@ -27,6 +27,24 @@ fonc<-function(x){
 fonc(105)
 fonc(35)
 
+#### Creation d'unefonction qui retourne tous les nombres d'un vecteur qui sont multiple de 3 et 5
+
+vect<-1:500
+
+fonc2<-function(x){
+  if(x%%5==0){
+    return("multiple de 5")
+  }
+ else if(x%%3==0) {
+   return("multiple de 3")
+ }
+  else {return(x)
+    
+  }
+}
+
+lec<-Vectorize(fonc2)
+lec(vect)
 
 
 
