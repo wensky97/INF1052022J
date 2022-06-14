@@ -1,0 +1,177 @@
+---
+title: "Final 2"
+author: "Wensky LOUIS-JEAN"
+date: '2022-06-14'
+output: word_document
+---
+####Mensonge graphique
+
+L’homme a un besoin flagrant d’attirer l’attention et pour cela il utilise des méthodes et des techniques qui font que opinion public se pose des questions pertinentes sur des sujets ce qui entraine une prise de conscience croissante du pouvoir de la visualisation de l'information.  Dans ce point l’une des parties important développer c’est l’objectivité des concepteur graphique d’information et des journalisme visuels . Beaucoup d’information trompeuses ont commencer par la et voici comment ?
+
+Tout d’abord il faut se demander un premier lieu c’est quoi un mensonge , selon le dictionnaire francais Larrousse c’est action de mentir , d’altérer ou de déguiser  la vérité de ce fait ce la nous envoie a une autre interrogation . Qui est l’interrogation qui suit « le graphique est il capable de mentir ?». le graphique peut induire le lecteur en erreur sans l’intervention consciente de son concepteur .De plus, les simples principes d'éthique poussent les designers à réfléchir à leur public, celui qui décodera ces graphes. Basculer l'attention du concepteur vers le lecteur rend la distinction entre mentir et tromper beaucoup plus floue, car dans le monde extérieur, les conséquences de l'ambiguïté sont graves. À cet égard, il est de notre responsabilité de nous éduquer pour surmonter nos propres préjugés, lacunes et lacunes dans les connaissances. Nous devons également travailler à minimiser la confusion et la mauvaise interprétation potentielle de nos graphiques.
+
+
+Malgré tout ce qui a été dit, nous, les humains, sommes capables de mentir graphiquement en notre nom. Comme mentionné dans les révélations visuelles de Howard Wainer, nous sommes arrivés à la conclusion que la plupart des mensonges graphiques sont basés sur trois stratégies qui sont:
+
+
+•	Masquer les données pertinentes pour mettre en évidence ce qui nous profite
+•	Afficher trop de données pour masquer la réalité
+•	Utiliser des formes graphiques de manière inappropriée
+
+
+ Bien qu'une statistique isolée puisse déformer la réalité, un autre signal d'alarme concernant l'utilisation abusive de l'information visuelle est le ratio croissant de professionnels des relations publiques par rapport aux journalistes. Ils sont submergés par la propagande de certains organes de presse, qu'ils ne sont pas prêts à identifier parfois. De plus, la plupart des journalistes et des concepteurs manquent d'un «détecteur de conneries» . D'un autre côté, de nombreux concepteurs ont tendance à rechercher l'attrait visuel bien plus qu'à rechercher d'abord l'exactitude, la précision et la profondeur. Ils voient l'infographie plus comme un art que comme une véritable science, une représentation objective de l'information. Malheureusement, ils deviennent de plus en plus inconscients des principes ou pire, ils sont prêts à les ignorer totalement.La principale racine des mensonges visuels est la liberté d'expression, comme nous pouvons le dire librement. Tout comme nous ne pouvons jamais nous débarrasser des erreurs, ces malheureuses pratiques de mensonges visuels seront là pendant un certain temps. Tout ce que nous pouvons faire pour l'instant, c'est mieux nous préparer, ainsi que les générations futures, à informer le public aussi honnêtement que possible. Ce n'est qu'en faisant cela que nous aurons une chance de minimiser le mal que les mensonges graphiques et les erreurs - étant tous deux inévitables - font à la société.
+
+
+
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=F}
+
+
+library(tidyverse)
+library(readxl)
+library(tseries)
+library(lmtest)
+
+
+
+#################
+# 1. Importation des donnees 
+#################
+
+# importation d'un fichier xls en ligne (without downloading it)
+
+url1<-'https://www.brh.ht/wp-content/uploads/agregatsmon.xls'
+p1f <- tempfile()
+download.file(url1, p1f, mode="wb")
+agregatsmon.data <-read_excel(path = p1f, skip = 2)
+
+
+# head(agregatsmon.data) # vizyalize 6 premye liy yo
+# tail(agregatsmon.data, n = 10) # # vizyalize 10 premye liy yo
+
+# data cleaning
+agregatsmon.data <- agregatsmon.data[1:517,] # retire 10 denye liy 
+
+agregatsmon.data <- rename(agregatsmon.data, Date = ...1) 
+
+agregatsmon.data <- agregatsmon.data[-1,] # retire premye liy done a (sak gen deskripsyon yo)
+
+
+agregatsmon.data$Date <- as.numeric(agregatsmon.data$Date)
+# conversion date format charactere -> numerique
+
+#sum(is.na(agregatsmon.data$Date)) 
+# 17 dates non formatees: 309-320, 360-364
+
+agregatsmon.data$Date <- as.Date(agregatsmon.data$Date, 
+                                 origin = "1899-12-30")
+# conversion dates format nombre en correct format 
+# en prenant 30 Decembre 1899 comme point de depart 
+
+#agregatsmon.data$Date # verification pour exact match avec fichier Excel
+
+# Formattage des 17 dates manquantes
+# Hint: taper les valeurs en observant le fichier excel 
+
+agregatsmon.data$Date[309] <- "2004-07-01"
+agregatsmon.data$Date[310] <- "2004-08-01"
+agregatsmon.data$Date[311] <- "2004-09-01"
+agregatsmon.data$Date[312] <- "2004-10-01"
+agregatsmon.data$Date[313] <- "2004-11-01"
+agregatsmon.data$Date[314] <- "2004-12-01"
+agregatsmon.data$Date[315] <- "2005-01-01"
+agregatsmon.data$Date[316] <- "2005-02-01"
+agregatsmon.data$Date[317] <- "2005-03-01"
+agregatsmon.data$Date[318] <- "2005-04-01"
+agregatsmon.data$Date[319] <- "2005-05-01"
+agregatsmon.data$Date[320] <- "2005-06-01"
+
+agregatsmon.data$Date[360] <- "2008-10-01"
+agregatsmon.data$Date[361] <- "2008-11-01"
+agregatsmon.data$Date[362] <- "2008-12-01"
+agregatsmon.data$Date[363] <- "2009-01-01"
+agregatsmon.data$Date[364] <- "2009-02-01"
+
+
+
+###############
+# 2. Filtrer a partir d'Octobre 1990
+#################
+
+agregatsmon.data2 <- agregatsmon.data %>% 
+  filter(Date >= "1990-10-01")
+
+#head(agregatsmon.data2)
+
+###############
+# 3. Retirer tous les colonnes inutiles
+###########
+
+agregatsmon.data2 <- agregatsmon.data2[,-c(5,9,11,15,20,23,25,30,35,40,42,47,56,79,84)]
+
+#head(agregatsmon.data2)
+
+agregatsmon.data3 <- agregatsmon.data2[, c(7,8,36,37)]
+
+
+agregatsmon.data3 <- agregatsmon.data3 %>% 
+  rename(M3 = 'M3...8',
+         taux_change = `TAUX DE CHANGE BRH`,
+         reserves_depot = "Réserves nettes de changes BRH avec dépôts des BCMs (millions de  $)",
+         reserves_systeme = "Réserves nettes de change du système banc.(millions de $)")
+
+agregatsmon.data3 <- agregatsmon.data3 %>% 
+  mutate(M3 = as.numeric(M3),
+         taux_change = as.numeric(taux_change),
+         reserves_depot = as.numeric(reserves_depot),
+         reserves_systeme = as.numeric(reserves_systeme))
+
+#head(agregatsmon.data3)
+
+
+agregatsmon.data3$Date <- agregatsmon.data2$Date
+
+
+
+
+
+
+```
+
+
+```{r,message=F, warning=FALSE, echo=FALSE}
+ggplot(agregatsmon.data3, aes(x = Date, y = M3))+
+   geom_line()+
+  labs(title = " Aggregat monetaire M3",
+       subtitle = "Periode: Octobre 1990 - Octobre 2021")
+ 
+
+
+```
+
+
+
+```{r,message=F, warning=F, echo=F}
+
+ggplot(agregatsmon.data3, aes(x = Date, y = M3))+
+   geom_point(color="red",size=2,shape=23)+
+  labs(title = " Aggregat monetaire M3",
+       subtitle = "Periode: Octobre 1990 - Octobre 2021")
+ 
+
+
+
+```
+
+```{r,message=F, warning=F, echo=F}
+
+ggplot(agregatsmon.data3, aes(x = Date, y = M3))+
+   geom_col(color="pink",size=1,shape=12)+
+  labs(title = " Aggregat monetaire M3",
+       subtitle = "Periode: Octobre 1990 - Octobre 2021")
+ 
+
+```
+
